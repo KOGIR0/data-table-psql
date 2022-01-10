@@ -1,25 +1,52 @@
 import logo from "./logo.svg";
 import "./App.css";
+import React from "react";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: [],
+    };
+  }
+
+  componentDidMount() {
+    fetch("/data.json")
+      .then((res) => {
+        return res.json();
+      })
+      .then((res) => {
+        console.log(res);
+        this.setState({
+          data: res,
+        });
+      });
+  }
+
+  render() {
+    return (
+      <table className="App">
+        <thead>
+          <th>Date</th>
+          <th>Name</th>
+          <th>Ammount</th>
+          <th>Distance</th>
+        </thead>
+        <tbody>
+          {this.state.data.map((element) => {
+            return (
+              <tr>
+                <td>{element.date}</td>
+                <td>{element.name}</td>
+                <td>{element.ammount}</td>
+                <td>{element.distance}</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    );
+  }
 }
 
 export default App;
