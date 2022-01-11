@@ -12,14 +12,18 @@ class App extends React.Component {
         ammount: "asc",
         distance: "asc",
       },
-      searchColumn: "",
-      searchType: "",
+      searchColumn: "date",
+      searchType: "equal",
       searchValue: "",
+      inputType: "text",
     };
+
+    this.filterData = this.filterData.bind(this);
+    this.setSearchColumn = this.setSearchColumn.bind(this);
   }
 
   componentDidMount() {
-    fetch("/data.json")
+    fetch("/data")
       .then((res) => {
         return res.json();
       })
@@ -51,6 +55,55 @@ class App extends React.Component {
     });
   }
 
+  filterData() {
+    const searchValue = this.state.searchValue;
+    const searchType = this.state.searchType;
+    const searchColumn = this.state.searchColumn;
+    let filteredData = this.state.data;
+
+    if (searchValue === "") {
+      return filteredData;
+    }
+
+    console.log(this.state.data, searchColumn, searchValue, searchType);
+
+    switch (searchType) {
+      case "equal":
+        filteredData = this.state.data.filter(
+          (value) => value[searchColumn] == searchValue
+        );
+        break;
+      case "contains":
+        if (searchColumn !== "ammount" && searchColumn !== "distance") {
+          filteredData = this.state.data.filter((value) =>
+            value[searchColumn].includes(searchValue)
+          );
+        }
+        break;
+      case "bigger":
+        filteredData = this.state.data.filter(
+          (value) => value[searchColumn] > searchValue
+        );
+        break;
+      case "smaller":
+        filteredData = this.state.data.filter(
+          (value) => value[searchColumn] < searchValue
+        );
+        break;
+    }
+
+    return filteredData;
+  }
+
+  setSearchColumn(e) {
+    const value = e.target.value;
+    let inputType = "text";
+    if (value === "ammount" || value === "distance") {
+      inputType = "number";
+    }
+    this.setState({ searchColumn: value, inputType: inputType });
+  }
+
   render() {
     return (
       <div>
@@ -58,7 +111,7 @@ class App extends React.Component {
           <select
             name="columns"
             id="search-column"
-            onChange={(e) => this.setState({ searchColumn: e.target.value })}
+            onChange={this.setSearchColumn}
           >
             <option value="date">Date</option>
             <option value="name">Name</option>
@@ -78,6 +131,7 @@ class App extends React.Component {
           <input
             id="search-value"
             onChange={(e) => this.setState({ searchValue: e.target.value })}
+            type={this.state.inputType}
           ></input>
         </div>
         <table className="App">
@@ -88,7 +142,7 @@ class App extends React.Component {
             <th onClick={() => this.sortByKey("distance")}>Distance</th>
           </thead>
           <tbody>
-            {this.state.data.map((element) => {
+            {this.filterData().map((element) => {
               return (
                 <tr>
                   <td>{element.date}</td>
