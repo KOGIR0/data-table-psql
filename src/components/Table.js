@@ -1,28 +1,26 @@
 function Table(props) {
+  const header = Object.keys(props.data[0] == null ? {} : props.data[0]).map(
+    (key) => (
+      <th onClick={() => props.sortByKey(key)}>
+        {key.charAt(0).toUpperCase() + key.slice(1)}
+      </th>
+    )
+  );
+
+  const body = props.data.map((element) => {
+    return (
+      <tr>
+        {Object.values(element).map((value) => (
+          <td>{value}</td>
+        ))}
+      </tr>
+    );
+  });
+
   return (
     <table className="App">
-      <thead>
-        {Object.entries(props.data[0] == null ? {} : props.data[0]).map(
-          ([key, value]) => {
-            return (
-              <th onClick={() => props.sortByKey(key)}>
-                {key.charAt(0).toUpperCase() + key.slice(1)}
-              </th>
-            );
-          }
-        )}
-      </thead>
-      <tbody>
-        {props.data.map((element) => {
-          return (
-            <tr>
-              {Object.entries(element).map(([key, value]) => (
-                <td>{value}</td>
-              ))}
-            </tr>
-          );
-        })}
-      </tbody>
+      <thead>{headers}</thead>
+      <tbody>{body}</tbody>
     </table>
   );
 }
