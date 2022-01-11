@@ -1,6 +1,7 @@
 require("dotenv").config();
 const { Client } = require("pg");
 
+// Loads initial data into database
 async function initializeData() {
   const client = new Client();
   try {
@@ -37,13 +38,6 @@ async function initializeData() {
   } catch (e) {
     console.log(e);
   }
-
-  console.log(
-    process.env.PGHOST,
-    process.env.PGUSER,
-    process.env.PGDATABASE,
-    process.env.PGPORT
-  );
 }
 
 module.exports = initializeData;
