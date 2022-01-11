@@ -118,9 +118,9 @@ class App extends React.Component {
       pageSize * (this.state.currentPage - 1),
       pageSize * this.state.currentPage
     );
-    const columnsSelectValues = Object.keys(
-      this.state.data[0] == null ? {} : this.state.data[0]
-    ).map((key) => key.charAt(0).toUpperCase() + key.slice(1));
+    const columnsSelectValues = Object.keys(this.state.data[0] || {}).map(
+      (key) => key.charAt(0).toUpperCase() + key.slice(1)
+    );
     const searchTypeSelectValues = ["Equal", "Contains", "Bigger", "Smaller"];
 
     return (
