@@ -19,12 +19,13 @@ app.use(express.static(path.join(__dirname, "public")));
 app.get("/data", async (req, res) => {
   const client = new Client();
   await client.connect();
+  let dataToSend;
 
   try {
-    let sendData = await client.query(
+    dataToSend = await client.query(
       "SELECT TO_CHAR(data_date, 'DD/MM/YYYY') as date, data_name as name, ammount, distance FROM data;"
     );
-    sendData = sendData.rows.map((value) => {
+    dataToSend = dataToSend.rows.map((value) => {
       return {
         date: value.date,
         name: value.name,
@@ -36,7 +37,7 @@ app.get("/data", async (req, res) => {
     res.send(e);
   }
 
-  res.send(sendData);
+  res.send(dataToSend);
 });
 
 app.listen(8000, () => {

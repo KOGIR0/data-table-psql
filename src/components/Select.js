@@ -1,8 +1,10 @@
 import React from "react";
 
 function Select(props) {
-  const options = props.data.map((value) => (
-    <option value={value.toLowerCase()}>{value}</option>
+  const options = props.data.map((value, index) => (
+    <option key={index} value={value.toLowerCase()}>
+      {value}
+    </option>
   ));
 
   return (
