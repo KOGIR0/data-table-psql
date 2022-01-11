@@ -2,6 +2,8 @@
 
 React app with express + PostgreSQL
 
+![App image](./public/app-image.png)
+
 ## Before Start
 
 Create PostgreSQL database with data table
