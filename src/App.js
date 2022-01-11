@@ -16,6 +16,7 @@ class App extends React.Component {
       searchType: "equal",
       searchValue: "",
       inputType: "text",
+      currentPage: 1,
     };
 
     this.filterData = this.filterData.bind(this);
@@ -28,7 +29,6 @@ class App extends React.Component {
         return res.json();
       })
       .then((res) => {
-        console.log(res);
         this.setState({
           data: res,
         });
@@ -64,8 +64,6 @@ class App extends React.Component {
     if (searchValue === "") {
       return filteredData;
     }
-
-    console.log(this.state.data, searchColumn, searchValue, searchType);
 
     switch (searchType) {
       case "equal":
@@ -142,18 +140,47 @@ class App extends React.Component {
             <th onClick={() => this.sortByKey("distance")}>Distance</th>
           </thead>
           <tbody>
-            {this.filterData().map((element) => {
-              return (
-                <tr>
-                  <td>{element.date}</td>
-                  <td>{element.name}</td>
-                  <td>{element.ammount}</td>
-                  <td>{element.distance}</td>
-                </tr>
-              );
-            })}
+            {this.filterData()
+              .slice(
+                5 * (this.state.currentPage - 1),
+                5 * this.state.currentPage
+              )
+              .map((element) => {
+                return (
+                  <tr>
+                    <td>{element.date}</td>
+                    <td>{element.name}</td>
+                    <td>{element.ammount}</td>
+                    <td>{element.distance}</td>
+                  </tr>
+                );
+              })}
           </tbody>
         </table>
+        <div class="row">
+          {[
+            ...Array(
+              Math.floor(this.state.data.length / 5) +
+                (this.state.data.length % 5 > 0 ? 1 : 0)
+            ).keys(),
+          ].map((pageNum) => {
+            return (
+              <div
+                key={pageNum}
+                onClick={() => this.setState({ currentPage: pageNum + 1 })}
+                style={{
+                  backgroundColor:
+                    this.state.currentPage === pageNum + 1
+                      ? "orange"
+                      : "yellow",
+                }}
+                class="page-number"
+              >
+                {pageNum + 1}
+              </div>
+            );
+          })}
+        </div>
       </div>
     );
   }

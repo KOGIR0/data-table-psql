@@ -7,6 +7,19 @@
   pointer-events: none;
 }
 
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
+.page-number {
+  margin: 5px;
+  border-radius: 5px;
+  width: 25px;
+  height: 25px;
+  text-align: center;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
