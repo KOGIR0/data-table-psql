@@ -121,6 +121,7 @@ class App extends React.Component {
     const columnsSelectValues = Object.keys(
       this.state.data[0] == null ? {} : this.state.data[0]
     ).map((key) => key.charAt(0).toUpperCase() + key.slice(1));
+    const searchTypeSelectValues = ["Equal", "Contains", "Bigger", "Smaller"];
 
     return (
       <div>
@@ -135,7 +136,7 @@ class App extends React.Component {
             name="type"
             id="search-type"
             onSelect={(e) => this.setState({ searchType: e.target.value })}
-            data={["Equal", "Contains", "Bigger", "Smaller"]}
+            data={searchTypeSelectValues}
           />
           <input
             id="search-value"
