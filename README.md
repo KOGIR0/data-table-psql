@@ -4,14 +4,27 @@ React app with express + PostgreSQL
 
 ## Before Start
 
+Create PostgreSQL database with data table
+
+```
+CREATE TABLE IF NOT EXISTS data (
+    data_id SERIAL PRIMARY KEY,
+    data_date DATE,
+    data_name VARCHAR(255),
+    ammount INT,
+    distance INT);
+```
+
 Create .env file with next data:
 
-PGHOST="Url to connect to PostgreSQL"
-PGUSER="PostgreSQL username"
-PGDATABASE="PostgreSQL Database name"
-PGPASSWORD=Password To PostgreSQL
-PGPORT=PSQL Port
-NODE_ENV="Optional mode: development, production"
+PGHOST="Url to connect to PostgreSQL"\
+PGUSER="PostgreSQL username"\
+PGDATABASE="PostgreSQL Database name"\
+PGPASSWORD=Password To PostgreSQL\
+PGPORT=PSQL Port\
+NODE_ENV="Optional mode: development"
+
+in development mode data is loaded into database with bootstrap.js
 
 ## Available Scripts
 
