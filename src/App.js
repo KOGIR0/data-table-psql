@@ -124,7 +124,7 @@ class App extends React.Component {
     const searchTypeSelectValues = ["Equal", "Contains", "Bigger", "Smaller"];
 
     return (
-      <div>
+      <div className="App">
         <div>
           <Select
             name="columns"

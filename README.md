@@ -33,7 +33,7 @@ In the project directory, you can run:
 ### `npm start`
 
 builds react app and runs server
-you can see app on /index.html
+you can see app on /
 
 ### `npm test`
 

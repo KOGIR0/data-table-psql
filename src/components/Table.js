@@ -14,7 +14,7 @@ function Table(props) {
   ));
 
   return (
-    <table className="App">
+    <table>
       <thead>{head}</thead>
       <tbody>{body}</tbody>
     </table>
