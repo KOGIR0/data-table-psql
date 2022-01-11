@@ -1,6 +1,8 @@
 import logo from "./logo.svg";
-import "./App.css";
+import "./styles/App.css";
 import React from "react";
+import Select from "./components/Select";
+import Table from "./components/Table";
 
 class App extends React.Component {
   constructor(props) {
@@ -21,6 +23,7 @@ class App extends React.Component {
 
     this.filterData = this.filterData.bind(this);
     this.setSearchColumn = this.setSearchColumn.bind(this);
+    this.sortByKey = this.sortByKey.bind(this);
   }
 
   componentDidMount() {
@@ -36,6 +39,9 @@ class App extends React.Component {
   }
 
   sortByKey(key) {
+    if (key === "date") {
+      return;
+    }
     let direction = this.state.direction;
     const asc = direction[key] === "asc";
     let sortedData = this.state.data.sort((a, b) => {
@@ -106,57 +112,31 @@ class App extends React.Component {
     return (
       <div>
         <div>
-          <select
+          <Select
             name="columns"
+            onSelect={this.setSearchColumn}
             id="search-column"
-            onChange={this.setSearchColumn}
-          >
-            <option value="date">Date</option>
-            <option value="name">Name</option>
-            <option value="ammount">Ammount</option>
-            <option value="distance">Distance</option>
-          </select>
-          <select
+            data={["Date", "Name", "Ammount", "Distance"]}
+          />
+          <Select
             name="type"
             id="search-type"
-            onChange={(e) => this.setState({ searchType: e.target.value })}
-          >
-            <option value="equal">Equal</option>
-            <option value="contains">Contains</option>
-            <option value="bigger">Bigger</option>
-            <option value="smaller">Smaller</option>
-          </select>
+            onSelect={(e) => this.setState({ searchType: e.target.value })}
+            data={["Equal", "Contains", "Bigger", "Smaller"]}
+          />
           <input
             id="search-value"
             onChange={(e) => this.setState({ searchValue: e.target.value })}
             type={this.state.inputType}
           ></input>
         </div>
-        <table className="App">
-          <thead>
-            <th>Date</th>
-            <th onClick={() => this.sortByKey("name")}>Name</th>
-            <th onClick={() => this.sortByKey("ammount")}>Ammount</th>
-            <th onClick={() => this.sortByKey("distance")}>Distance</th>
-          </thead>
-          <tbody>
-            {this.filterData()
-              .slice(
-                5 * (this.state.currentPage - 1),
-                5 * this.state.currentPage
-              )
-              .map((element) => {
-                return (
-                  <tr>
-                    <td>{element.date}</td>
-                    <td>{element.name}</td>
-                    <td>{element.ammount}</td>
-                    <td>{element.distance}</td>
-                  </tr>
-                );
-              })}
-          </tbody>
-        </table>
+        <Table
+          data={this.filterData().slice(
+            5 * (this.state.currentPage - 1),
+            5 * this.state.currentPage
+          )}
+          sortByKey={this.sortByKey}
+        />
         <div class="row">
           {[
             ...Array(
