@@ -3,6 +3,7 @@ import "./styles/App.css";
 import React from "react";
 import Select from "./components/Select";
 import Table from "./components/Table";
+import PageNumbers from "./components/PageNumbers";
 
 class App extends React.Component {
   constructor(props) {
@@ -109,6 +110,16 @@ class App extends React.Component {
   }
 
   render() {
+    const pageSize = 5;
+    const filteredData = this.filterData();
+    const pageCount =
+      Math.floor(filteredData.length / pageSize) +
+      (filteredData.length % pageSize > 0 ? 1 : 0);
+    const tableData = filteredData.slice(
+      pageSize * (this.state.currentPage - 1),
+      pageSize * this.state.currentPage
+    );
+
     return (
       <div>
         <div>
@@ -130,37 +141,14 @@ class App extends React.Component {
             type={this.state.inputType}
           ></input>
         </div>
-        <Table
-          data={this.filterData().slice(
-            5 * (this.state.currentPage - 1),
-            5 * this.state.currentPage
-          )}
-          sortByKey={this.sortByKey}
+        <Table data={tableData} sortByKey={this.sortByKey} />
+        <PageNumbers
+          currentPage={this.state.currentPage}
+          onPageNumClick={(pageNum) =>
+            this.setState({ currentPage: pageNum + 1 })
+          }
+          pageCount={pageCount}
         />
-        <div class="row">
-          {[
-            ...Array(
-              Math.floor(this.state.data.length / 5) +
-                (this.state.data.length % 5 > 0 ? 1 : 0)
-            ).keys(),
-          ].map((pageNum) => {
-            return (
-              <div
-                key={pageNum}
-                onClick={() => this.setState({ currentPage: pageNum + 1 })}
-                style={{
-                  backgroundColor:
-                    this.state.currentPage === pageNum + 1
-                      ? "orange"
-                      : "yellow",
-                }}
-                class="page-number"
-              >
-                {pageNum + 1}
-              </div>
-            );
-          })}
-        </div>
       </div>
     );
   }
