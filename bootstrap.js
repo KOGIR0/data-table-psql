@@ -2,7 +2,7 @@ require("dotenv").config();
 const { Client } = require("pg");
 
 // Loads initial data into database
-async function initializeData() {
+async function bootstrap() {
   const client = new Client();
   try {
     await client.connect();
@@ -40,4 +40,4 @@ async function initializeData() {
   }
 }
 
-module.exports = initializeData;
+module.exports = bootstrap;

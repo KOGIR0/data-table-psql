@@ -1,14 +1,14 @@
 const express = require("express");
 const path = require("path");
 const app = express();
-const initializeData = require("./dataLoad.js");
+const bootstrap = require("./bootstrap.js");
 const { Client } = require("pg");
 
 if (process.env.NODE_ENV === "development") {
   console.log("Develpment mode");
   // initialazes PostgreSQL data
   // runs if you set .env variable NODE_ENV="development"
-  initializeData();
+  bootstrap();
 } else {
   console.log("Production mode");
 }
