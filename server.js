@@ -3,6 +3,7 @@ const path = require("path");
 const app = express();
 const bootstrap = require("./bootstrap.js");
 const { Client } = require("pg");
+const PORT = process.env.PORT || 3000;
 
 if (process.env.NODE_ENV === "development") {
   console.log("Develpment mode");
@@ -40,6 +41,6 @@ app.get("/data", async (req, res) => {
   res.send(dataToSend);
 });
 
-app.listen(8000, () => {
-  console.log("server started on port 8000");
+app.listen(PORT, () => {
+  console.log("server started on port " + PORT);
 });
