@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Table from "./Table";
 import PageNumbers from "./PageNumbers";
 
@@ -7,11 +7,7 @@ function PagedTable(props) {
   const pageCount =
     Math.floor(props.data.length / pageSize) +
     (props.data.length % pageSize > 0 ? 1 : 0);
-  const [direction, setDirection] = useState({
-    name: "asc",
-    ammount: "asc",
-    distance: "asc",
-  });
+  const [direction, setDirection] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
 
   const data = props.data.slice(
