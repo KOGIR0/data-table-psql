@@ -1,8 +1,8 @@
 import "./styles/App.css";
 import React from "react";
-import Select from "./components/Select";
 import Table from "./components/Table";
 import PageNumbers from "./components/PageNumbers";
+import Filter from "./components/Filter";
 
 class App extends React.Component {
   constructor(props) {
@@ -17,13 +17,12 @@ class App extends React.Component {
       searchColumn: "date",
       searchType: "equal",
       searchValue: "",
-      inputType: "text",
       currentPage: 1,
     };
 
     this.filterData = this.filterData.bind(this);
-    this.setSearchColumn = this.setSearchColumn.bind(this);
     this.sortByKey = this.sortByKey.bind(this);
+    this.filter = this.filter.bind(this);
   }
 
   componentDidMount() {
@@ -99,13 +98,12 @@ class App extends React.Component {
     return filteredData;
   }
 
-  setSearchColumn(e) {
-    const value = e.target.value;
-    let inputType = "text";
-    if (value === "ammount" || value === "distance") {
-      inputType = "number";
-    }
-    this.setState({ searchColumn: value, inputType: inputType });
+  filter(searchColumn, searchType, searchValue) {
+    this.setState({
+      searchColumn: searchColumn,
+      searchType: searchType,
+      searchValue: searchValue,
+    });
   }
 
   render() {
@@ -121,29 +119,13 @@ class App extends React.Component {
     const columnsSelectValues = Object.keys(this.state.data[0] || {}).map(
       (key) => key.charAt(0).toUpperCase() + key.slice(1)
     );
-    const searchTypeSelectValues = ["Equal", "Contains", "Bigger", "Smaller"];
 
     return (
       <div className="App">
-        <div>
-          <Select
-            name="columns"
-            onSelect={this.setSearchColumn}
-            id="search-column"
-            data={columnsSelectValues}
-          />
-          <Select
-            name="type"
-            id="search-type"
-            onSelect={(e) => this.setState({ searchType: e.target.value })}
-            data={searchTypeSelectValues}
-          />
-          <input
-            id="search-value"
-            onChange={(e) => this.setState({ searchValue: e.target.value })}
-            type={this.state.inputType}
-          ></input>
-        </div>
+        <Filter
+          columnsSelectValues={columnsSelectValues}
+          filter={this.filter}
+        />
         <Table data={tableData} sortByKey={this.sortByKey} />
         <PageNumbers
           currentPage={this.state.currentPage}
