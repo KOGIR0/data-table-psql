@@ -12,10 +12,11 @@ function PagedTable(props) {
     ammount: "asc",
     distance: "asc",
   });
+  const [currentPage, setCurrentPage] = useState(1);
 
   const data = props.data.slice(
-    pageSize * (props.currentPage - 1),
-    pageSize * props.currentPage
+    pageSize * (currentPage - 1),
+    pageSize * currentPage
   );
 
   let sort = (key) => {
@@ -29,8 +30,8 @@ function PagedTable(props) {
     <div>
       <Table data={data} onHeaderClick={sort} />
       <PageNumbers
-        currentPage={props.currentPage}
-        onPageNumClick={props.onPageClick}
+        currentPage={currentPage}
+        onPageNumClick={(pageNum) => setCurrentPage(pageNum + 1)}
         pageCount={pageCount}
       />
     </div>

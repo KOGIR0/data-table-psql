@@ -11,7 +11,6 @@ class App extends React.Component {
       searchColumn: "date",
       searchType: "equal",
       searchValue: "",
-      currentPage: 1,
     };
 
     this.filterData = this.filterData.bind(this);
@@ -114,8 +113,6 @@ class App extends React.Component {
         <PagedTable
           data={filteredData}
           onHeaderClick={this.sortByKey}
-          currentPage={this.state.currentPage}
-          onPageClick={(pageNum) => this.setState({ currentPage: pageNum + 1 })}
           pageSize={5}
         />
       </div>
