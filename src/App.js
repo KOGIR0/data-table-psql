@@ -1,19 +1,13 @@
 import "./styles/App.css";
 import React from "react";
-import Table from "./components/Table";
-import PageNumbers from "./components/PageNumbers";
 import Filter from "./components/Filter";
+import PagedTable from "./components/PagedTable";
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       data: [],
-      direction: {
-        name: "asc",
-        ammount: "asc",
-        distance: "asc",
-      },
       searchColumn: "date",
       searchType: "equal",
       searchValue: "",
@@ -21,8 +15,8 @@ class App extends React.Component {
     };
 
     this.filterData = this.filterData.bind(this);
-    this.sortByKey = this.sortByKey.bind(this);
     this.filter = this.filter.bind(this);
+    this.sortByKey = this.sortByKey.bind(this);
   }
 
   componentDidMount() {
@@ -35,29 +29,6 @@ class App extends React.Component {
           data: res,
         });
       });
-  }
-
-  sortByKey(key) {
-    if (key === "date") {
-      return;
-    }
-    let direction = this.state.direction;
-    const asc = direction[key] === "asc";
-    let sortedData = this.state.data.sort((a, b) => {
-      if (a[key] < b[key]) {
-        return asc ? -1 : 1;
-      } else if (a[key] > b[key]) {
-        return asc ? 1 : -1;
-      } else {
-        return 0;
-      }
-    });
-    direction[key] = asc ? "desc" : "asc";
-
-    this.setState({
-      data: sortedData,
-      direction: direction,
-    });
   }
 
   filterData() {
@@ -106,16 +77,30 @@ class App extends React.Component {
     });
   }
 
+  sortByKey(data, key, direction) {
+    if (key === "date") {
+      return;
+    }
+
+    const asc = direction === "asc";
+    data = data.sort((a, b) => {
+      if (a[key] < b[key]) {
+        return asc ? -1 : 1;
+      } else if (a[key] > b[key]) {
+        return asc ? 1 : -1;
+      } else {
+        return 0;
+      }
+    });
+    direction = asc ? "desc" : "asc";
+
+    this.setState({
+      data: data,
+    });
+  }
+
   render() {
-    const pageSize = 5;
     const filteredData = this.filterData();
-    const pageCount =
-      Math.floor(filteredData.length / pageSize) +
-      (filteredData.length % pageSize > 0 ? 1 : 0);
-    const tableData = filteredData.slice(
-      pageSize * (this.state.currentPage - 1),
-      pageSize * this.state.currentPage
-    );
     const columnsSelectValues = Object.keys(this.state.data[0] || {}).map(
       (key) => key.charAt(0).toUpperCase() + key.slice(1)
     );
@@ -126,13 +111,12 @@ class App extends React.Component {
           columnsSelectValues={columnsSelectValues}
           filter={this.filter}
         />
-        <Table data={tableData} sortByKey={this.sortByKey} />
-        <PageNumbers
+        <PagedTable
+          data={filteredData}
+          onHeaderClick={this.sortByKey}
           currentPage={this.state.currentPage}
-          onPageNumClick={(pageNum) =>
-            this.setState({ currentPage: pageNum + 1 })
-          }
-          pageCount={pageCount}
+          onPageClick={(pageNum) => this.setState({ currentPage: pageNum + 1 })}
+          pageSize={5}
         />
       </div>
     );

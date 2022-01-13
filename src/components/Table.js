@@ -1,6 +1,6 @@
 function Table(props) {
   const head = Object.keys(props.data[0] || {}).map((key, index) => (
-    <th key={index} onClick={() => props.sortByKey(key)}>
+    <th key={index} onClick={() => props.onHeaderClick(key)}>
       {key.charAt(0).toUpperCase() + key.slice(1)}
     </th>
   ));
