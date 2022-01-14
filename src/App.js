@@ -1,36 +1,33 @@
 import "./styles/App.css";
 import React from "react";
 import PagedFilterTable from "./components/PagedFilterTable";
+import { useState, useEffect } from "react";
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      data: [],
+function App(props) {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await fetch("/data");
+        const json = await res.json();
+        console.log("Fetched data: ", json);
+        setData(json);
+      } catch (e) {
+        console.log("Error fetching data: ", e);
+      }
     };
 
-    this.sortByKey = this.sortByKey.bind(this);
-  }
+    fetchData();
+  }, []);
 
-  componentDidMount() {
-    fetch("/data")
-      .then((res) => {
-        return res.json();
-      })
-      .then((res) => {
-        this.setState({
-          data: res,
-        });
-      });
-  }
-
-  sortByKey(data, key, direction) {
+  let sortByKey = (data, key, direction) => {
     if (key === "date") {
       return;
     }
 
     const asc = direction === "asc";
-    data = data.sort((a, b) => {
+    let sortedData = [...data].sort((a, b) => {
       if (a[key] < b[key]) {
         return asc ? -1 : 1;
       } else if (a[key] > b[key]) {
@@ -40,19 +37,16 @@ class App extends React.Component {
       }
     });
     direction = asc ? "desc" : "asc";
+    console.log("Sorted data: ", sortedData);
 
-    this.setState({
-      data: data,
-    });
-  }
+    setData(sortedData);
+  };
 
-  render() {
-    return (
-      <div className="App">
-        <PagedFilterTable data={this.state.data} sortByKey={this.sortByKey} />
-      </div>
-    );
-  }
+  return (
+    <div className="App">
+      <PagedFilterTable data={data} sortByKey={sortByKey} />
+    </div>
+  );
 }
 
 export default App;
