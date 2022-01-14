@@ -18,11 +18,11 @@ app.use(express.static(path.join(__dirname, "build")));
 app.use(express.static(path.join(__dirname, "public")));
 
 app.get("/data", async (req, res) => {
-  const client = new Client();
-  await client.connect();
   let dataToSend;
 
   try {
+    const client = new Client();
+    await client.connect();
     dataToSend = await client.query(
       "SELECT TO_CHAR(data_date, 'DD/MM/YYYY') as date, data_name as name, ammount, distance FROM data;"
     );
